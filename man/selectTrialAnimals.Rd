@@ -28,5 +28,5 @@ If not enough piglets meet the in trial criteria the function removes the lowest
 The function tries to select piglets in such a way that the mean weaning weight of the barrows in trial is close to the mean weaning weight of the gilts in trial.
 }
 \examples{
-selectTrialAnimals(biggen,72,72,5.4,9.5)
+animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)
 }
