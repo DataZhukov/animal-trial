@@ -7,21 +7,25 @@
 selectTrialAnimals(data, nB, nZ, minWeight, maxWeight)
 }
 \arguments{
-\item{data}{data.table}
+\item{data}{data.table with columns Opm. (comments), Sex (sex of piglets), and Speen_gew (weaning weights of piglets)}
 
-\item{nB}{numeric}
+\item{nB}{numeric number of barrows to be selected}
 
-\item{nZ}{numeric}
+\item{nZ}{numeric number of gilts to be selected}
 
-\item{minWeight}{numeric}
+\item{minWeight}{numeric minimum weight of piglets to be selected}
 
-\item{maxWeight}{numeric}
+\item{maxWeight}{numeric maximum weight of piglets to be selected}
 }
 \value{
-list
+list with elements animalsInTrial (piglets selected for trial) and animalsOutTrial (piglets left out of trial)
 }
 \description{
 Select which animals to include and which to exclude from the trial
+}
+\details{
+If not enough piglets meet the in trial criteria the function removes the lowest weight animals until it is left with the required amount.
+The function tries to select piglets in such a way that the mean weaning weight of the barrows in trial is close to the mean weaning weight of the gilts in trial.
 }
 \examples{
 selectTrialAnimals(biggen,72,72,5.4,9.5)
