@@ -24,7 +24,7 @@ assignComp <- function(data,beh){
     count <- 0
     while (count == 0){
       compTempB$Comp <- sample(c(rep(1:x,(nrow(compTempB)/x))),replace = F)
-      if (max(compTempB[,sum(duplicated(Gew_klasse)),Comp]$V1) == 0){
+      if (max(compTempB[,sum(duplicated(Gew_klasse)),Comp]$V1) == 0 ){
         count <- count + 1
       }
     }

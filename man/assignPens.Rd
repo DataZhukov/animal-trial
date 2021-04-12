@@ -4,7 +4,7 @@
 \alias{assignPens}
 \title{Assign piglets to pens}
 \usage{
-assignPens(data, nH, cutoff)
+assignPens(data, nH, cutoff, nWC = 3)
 }
 \arguments{
 \item{data}{data.table}
@@ -12,6 +12,8 @@ assignPens(data, nH, cutoff)
 \item{nH}{numeric}
 
 \item{cutoff}{numeric}
+
+\item{nWC}{numeric}
 }
 \value{
 data.table

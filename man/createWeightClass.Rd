@@ -4,10 +4,12 @@
 \alias{createWeightClass}
 \title{Create weight classes}
 \usage{
-createWeightClass(data)
+createWeightClass(data, nWC = 3)
 }
 \arguments{
 \item{data}{data.table}
+
+\item{nWC}{numeric}
 }
 \value{
 data.table
