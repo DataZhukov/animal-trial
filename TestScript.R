@@ -1,6 +1,7 @@
 #Test script - use to test out package functions
 
 animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
+animalsOutTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[2]]
 min(animalsInTrial$Speen_gew)
 animalsInTrial <- assignPens(animalsInTrial,6,0.1,nWC=3)
 animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Geel"))
@@ -24,3 +25,8 @@ chi<- chisq.test(table(animalsInTrial$Comp,animalsInTrial$Gew_klasse))
 chi$p.value
 table(animalsInTrial$Comp,animalsInTrial$Beh)
 table(animalsInTrial$Comp,animalsInTrial$Sex)
+
+biggen <- bind_rows(animalsInTrial,animalsOutTrial)
+write.table(biggen,file = "Output/biggen.txt",sep="|",dec=".",na="NA",row.names = F)
+
+devtools::install_github("DataZhukov/animalTrial")
