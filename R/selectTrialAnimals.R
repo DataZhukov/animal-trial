@@ -17,7 +17,7 @@
 #' @import data.table
 #'
 #' @examples
-#' animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)
+#' animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
 selectTrialAnimals <- function(data, nB, nZ, minWeight,maxWeight){
   Opm. <- Sex <- Speen_gew <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
   buitenProef <- data[!is.na(Opm.)] #All piglets with comments to be left out of trial
