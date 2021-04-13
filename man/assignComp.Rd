@@ -4,12 +4,14 @@
 \alias{assignComp}
 \title{Assign pens to compartments}
 \usage{
-assignComp(data, beh)
+assignComp(data, beh, nPC = 8)
 }
 \arguments{
 \item{data}{data.table}
 
 \item{beh}{character vector}
+
+\item{nPC}{numeric}
 }
 \value{
 data.table

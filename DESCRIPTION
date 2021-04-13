@@ -18,4 +18,5 @@ Depends:
 Imports: 
   data.table,
   NMOF,
-  stats
+  stats,
+  groupdata2
