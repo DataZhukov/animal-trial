@@ -23,6 +23,7 @@ assignComp <- function(data,beh,nPC=8, etime=10){
 
   chi.p <- 0
   alpha <- 0.1
+  mult <- 0
   start_time <- Sys.time()
 while (chi.p < alpha) {
 
@@ -57,10 +58,15 @@ while (chi.p < alpha) {
 
   end_time <- Sys.time()
   dif <- difftime(end_time, start_time, units = "secs")
-  if(dif > etime){alpha <- 0.05}
+  if(dif > etime){
+    alpha <- alpha / 2
+    mult <- mult + 1
+    start_time <- Sys.time()
+    }
 }
 
-  if(alpha == 0.05){warning(paste("Elapsed time > ",etime,"s, balancing criteria made less stringent, weight classes might not be distributed as evenly as possible across compartments, consider manipulating manually or setting etime > ",etime,"s.",sep=""))}
+  if(mult > 0){warning(paste("Total elapsed time > ",etime * mult,"s, balancing criteria were made less stringent, weight classes might not be distributed as evenly as possible across compartments, consider manipulating manually or setting etime > ",etime,"s.",sep=""))}
+
   print("Table of compartments vs. weight classes:")
   print(table(tempAIT$Comp,tempAIT$Gew_klasse))
 
