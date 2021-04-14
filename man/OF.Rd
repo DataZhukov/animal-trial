@@ -7,15 +7,15 @@
 OF(x, data, ...)
 }
 \arguments{
-\item{x}{numeric pen number}
+\item{x}{numeric vector of pen numbers}
 
-\item{data}{data.table}
+\item{data}{data.table with column Speen_gew (weaning weights of piglets)}
 
-\item{...}{parameters to be applied to other functions}
+\item{...}{parameters to be applied to sd and tapply}
 }
 \value{
 numeric
 }
 \description{
-Function to optimize for switchInPen function
+Calculates standard deviation of average weight per pen
 }

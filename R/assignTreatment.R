@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
-#' animalsInTrial <- assignPens(animalsInTrial,6,0.1)
+#' animalsInTrial <- assignPens(animalsInTrial,6)
 #' animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Groen","Rood","Geel"))
 assignTreatment <- function(data,beh){
   Sex <- Gew_klasse <- Hok <- Speen_gew <- Beh <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html

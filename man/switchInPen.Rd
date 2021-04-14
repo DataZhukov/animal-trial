@@ -4,16 +4,14 @@
 \alias{switchInPen}
 \title{Avoid siblings in pens}
 \usage{
-switchInPen(data, cutoff)
+switchInPen(data)
 }
 \arguments{
 \item{data}{data.table}
-
-\item{cutoff}{numeric}
 }
 \value{
 data.table
 }
 \description{
-Avoid siblings in pens
+Switches siblings in same pen to other pen while keeping standard deviation in average weight per pen to a minimum
 }

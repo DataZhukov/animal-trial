@@ -9,11 +9,11 @@ createWeightClass(data, nWC = 3)
 \arguments{
 \item{data}{data.table}
 
-\item{nWC}{numeric}
+\item{nWC}{numeric number of weight classes to assign can be 1, 2, or 3}
 }
 \value{
 data.table
 }
 \description{
-Create weight classes
+Assigns weight class to each piglet
 }

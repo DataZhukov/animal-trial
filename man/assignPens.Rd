@@ -4,24 +4,22 @@
 \alias{assignPens}
 \title{Assign piglets to pens}
 \usage{
-assignPens(data, nH, cutoff, nWC = 3)
+assignPens(data, nH, nWC = 3)
 }
 \arguments{
-\item{data}{data.table}
+\item{data}{data.table with columns Zeugnr (sow ID),  Sex (sex of piglets), and Speen_gew (weaning weights of piglets)}
 
-\item{nH}{numeric}
+\item{nH}{numeric number of piglets to be housed in each pen}
 
-\item{cutoff}{numeric}
-
-\item{nWC}{numeric}
+\item{nWC}{numeric number of weight classes to be created (default = 3)}
 }
 \value{
-data.table
+data.table with added column Hok (pen)
 }
 \description{
-Assign piglets to pens
+Assign piglets to their pens keeping standard deviation in average weight per pen to a minimum.
 }
 \examples{
 animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
-animalsInTrial <- assignPens(animalsInTrial,6,0.1)
+animalsInTrial <- assignPens(animalsInTrial,6)
 }

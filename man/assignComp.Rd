@@ -23,7 +23,7 @@ Assign pens to compartments
 }
 \examples{
 animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
-animalsInTrial <- assignPens(animalsInTrial,6,0.1)
+animalsInTrial <- assignPens(animalsInTrial,6)
 animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Groen","Rood","Geel"))
 animalsInTrial <- assignComp(animalsInTrial,c("Wit","Groen","Rood","Geel"))
 }

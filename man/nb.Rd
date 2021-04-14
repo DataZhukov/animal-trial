@@ -9,13 +9,13 @@ nb(x, data, sowids)
 \arguments{
 \item{x}{numeric vector of pens}
 
-\item{data}{data.table}
+\item{data}{data.table with column Zeugnr (sow ID)}
 
-\item{sowids}{character vector}
+\item{sowids}{character vector of sow ID's that appear more than once (i.e. siblings)}
 }
 \value{
 numeric vector
 }
 \description{
-Select siblings to switch
+Selects and switches siblings randomly
 }
