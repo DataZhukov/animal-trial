@@ -9,13 +9,13 @@ assignTreatment(data, beh)
 \arguments{
 \item{data}{data.table}
 
-\item{beh}{character vector}
+\item{beh}{character vector of treatment names}
 }
 \value{
-data.table
+data.table with added column Beh (Treatment)
 }
 \description{
-Assign treatments to pens
+Assign pens to treatments
 }
 \examples{
 animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]

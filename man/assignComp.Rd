@@ -4,26 +4,24 @@
 \alias{assignComp}
 \title{Assign pens to compartments}
 \usage{
-assignComp(data, beh, nPC = 8, etime = 10)
+assignComp(data, nPC = 8, etime = 10)
 }
 \arguments{
-\item{data}{data.table}
+\item{data}{data.table with columns Sex (sex of piglets), Gew_klasse (weight class), Beh (Treatment), and Hok (Pen)}
 
-\item{beh}{character vector}
+\item{nPC}{numeric number of pens per compartment}
 
-\item{nPC}{numeric}
-
-\item{etime}{numeric}
+\item{etime}{numeric number of seconds to allow iterations before dropping the stringency for level of balance to strive for in weight class distribution over compartments}
 }
 \value{
-data.table
+data.table with added column Comp (compartment)
 }
 \description{
-Assign pens to compartments
+Assign pens to their compartment randomly but balanced over sex, treatment, and as much as possible over weight class
 }
 \examples{
 animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
 animalsInTrial <- assignPens(animalsInTrial,6)
 animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Groen","Rood","Geel"))
-animalsInTrial <- assignComp(animalsInTrial,c("Wit","Groen","Rood","Geel"))
+animalsInTrial <- assignComp(animalsInTrial)
 }

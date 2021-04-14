@@ -1,9 +1,11 @@
 #' Assign treatments to pens
 #'
-#' @param data data.table
-#' @param beh character vector
+#' Assign pens to treatments
 #'
-#' @return data.table
+#' @param data data.table
+#' @param beh character vector of treatment names
+#'
+#' @return data.table with added column Beh (Treatment)
 #' @export
 #'
 #' @examples
@@ -12,7 +14,7 @@
 #' animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Groen","Rood","Geel"))
 assignTreatment <- function(data,beh){
   Sex <- Gew_klasse <- Hok <- Speen_gew <- Beh <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
-  treat <- data[order(Sex,Gew_klasse,Hok)]
+  treat <- data[order(Sex,Gew_klasse,Hok)] #sort data by sex, weight class and pen
 
   nWC <- length(unique(treat$Gew_klasse))
   nH <- as.numeric(summary(as.factor(treat$Hok))[1])
