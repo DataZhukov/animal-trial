@@ -5,7 +5,7 @@ animalsOutTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[2]]
 min(animalsInTrial$Speen_gew)
 animalsInTrial <- assignPens(animalsInTrial,6,nWC=3)
 animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Geel","Groen","Rood"))
-animalsInTrial <- assignComp(animalsInTrial,c("Wit","Geel","Groen","Rood"))
+animalsInTrial <- assignComp(animalsInTrial)
 table(animalsInTrial$Comp,animalsInTrial$Gew_klasse,animalsInTrial$Beh)
 
 group_by

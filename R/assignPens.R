@@ -9,17 +9,17 @@
 createWeightClass <- function(data, nWC=3){
   Sex <- Speen_gew <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
 
-  if(!(nWC %in% c(1,2,3))){stop("Can only have 1, 2, or 3 weight classes")}
+  if(!(nWC %in% c(1,2,3))){base::stop("Can only have 1, 2, or 3 weight classes")}
 
-  data <- data[order(Sex,Speen_gew)] #Sort piglets by sex and weaning weight
+  data <- data[base::order(Sex,Speen_gew)] #Sort piglets by sex and weaning weight
 
-  x <- nrow(data[Sex=="B"]) / nWC #Size of each weight class for barrows
-  y <- nrow(data[Sex=="Z"]) / nWC #Size of each weight class for gilts
+  x <- base::nrow(data[Sex=="B"]) / nWC #Size of each weight class for barrows
+  y <- base::nrow(data[Sex=="Z"]) / nWC #Size of each weight class for gilts
 
   #Assign weight class to each piglet
-  if(nWC==1){data$Gew_klasse <- as.factor(c(rep("M",x),rep("M",x)))}
-  if(nWC==2){data$Gew_klasse <- as.factor(c(rep("L",x),rep("Z",x),rep("L",x),rep("Z",x)))}
-  if(nWC==3){data$Gew_klasse <- as.factor(c(rep("L",x),rep("M",x),rep("Z",x),rep("L",x),rep("M",x),rep("Z",x)))}
+  if(nWC==1){data$Gew_klasse <- base::as.factor(c(base::rep("M",x),base::rep("M",x)))}
+  if(nWC==2){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("Z",x),base::rep("L",x),base::rep("Z",x)))}
+  if(nWC==3){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("M",x),base::rep("Z",x),base::rep("L",x),base::rep("M",x),base::rep("Z",x)))}
 
   return(data)
 }
@@ -36,7 +36,7 @@ createWeightClass <- function(data, nWC=3){
 #'
 #' @import stats
 OF <- function(x, data, ...){
-  sd(tapply(data$Speen_gew, x, mean))
+  stats::sd(base::tapply(data$Speen_gew, x, base::mean))
 }
 
 #' Select siblings to switch
@@ -49,9 +49,9 @@ OF <- function(x, data, ...){
 #'
 #' @return numeric vector
 nb <- function(x, data, sowids) {
-  s <- sowids[sample(length(sowids), 1)] #select random sow ID
-  ij <- sample(which(data$Zeugnr == s))[1:2] #select sibling of this sow together with individual sow
-  x[ij] <- x[rev(ij)] #switch pens for these siblings
+  s <- sowids[base::sample(base::length(sowids), 1)] #select random sow ID
+  ij <- base::sample(base::which(data$Zeugnr == s))[1:2] #select sibling of this sow together with individual sow
+  x[ij] <- x[base::rev(ij)] #switch pens for these siblings
   x #return pen vector with switch
 }
 
@@ -66,11 +66,11 @@ nb <- function(x, data, sowids) {
 #' @import NMOF
 switchInPen <- function(data){
   Sex <- Gew_klasse <- Hok <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
-  tempPens <- data[order(Sex,Gew_klasse,Hok)]
+  tempPens <- data[base::order(Sex,Gew_klasse,Hok)]
 
-  sowids <- names(table(tempPens$Zeugnr)[table(tempPens$Zeugnr) > 1]) #select sow ID's that appear multiple times
+  sowids <- base::names(base::table(tempPens$Zeugnr)[base::table(tempPens$Zeugnr) > 1]) #select sow ID's that appear multiple times
 
-  sol.ls <- LSopt(OF, list(x0 = tempPens$Hok,
+  sol.ls <- NMOF::LSopt(OF, base::list(x0 = tempPens$Hok,
                            neighbour = nb,
                            nI = 1000),
                   data = tempPens, sowids = sowids) #use standard deviation in average weight per pen as optimizing function in LSopt function while switching siblings between pens, keep optimal solution from 1000 iterations
@@ -98,33 +98,33 @@ switchInPen <- function(data){
 assignPens <- function(data, nH, nWC=3){
   Sex <- Gew_klasse <- Zeugnr <- Rand <-Speen_gew <- Hok <- V1 <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
 
-  if((nrow(data[Sex=="B"]) %% nH) != 0){stop("Number of barrows is not a multiple of number of piglets per pen")}
-  if((nrow(data[Sex=="Z"]) %% nH) != 0){stop("Number of gilts is not a multiple of number of piglets per pen")}
+  if((base::nrow(data[Sex=="B"]) %% nH) != 0){stop("Number of barrows is not a multiple of number of piglets per pen")}
+  if((base::nrow(data[Sex=="Z"]) %% nH) != 0){stop("Number of gilts is not a multiple of number of piglets per pen")}
 
-  if((nrow(data[Sex=="B"]) %% nWC) != 0){stop("Number of barrows is not a multiple of weight classes, consider changing nWC, possible values are c(1, 2, 3)")}
-  if((nrow(data[Sex=="Z"]) %% nWC) != 0){stop("Number of gilts is not a multiple of weight classes, consider changing nWC, possible values are c(1, 2, 3)")}
+  if((base::nrow(data[Sex=="B"]) %% nWC) != 0){stop("Number of barrows is not a multiple of weight classes, consider changing nWC, possible values are c(1, 2, 3)")}
+  if((base::nrow(data[Sex=="Z"]) %% nWC) != 0){stop("Number of gilts is not a multiple of weight classes, consider changing nWC, possible values are c(1, 2, 3)")}
 
-  x <- nrow(data[Sex=="B"])  / (nWC * nH)
-  y <- nrow(data[Sex=="Z"])  / (nWC * nH)
+  x <- base::nrow(data[Sex=="B"])  / (nWC * nH)
+  y <- base::nrow(data[Sex=="Z"])  / (nWC * nH)
 
   tempAIT <- data
 
   tempAIT <- createWeightClass(tempAIT,nWC) #create weight classes
 
-  tempAIT$Rand <- runif(nrow(tempAIT),0,1) #create variable of random numbers
+  tempAIT$Rand <- stats::runif(base::nrow(tempAIT),0,1) #create variable of random numbers
 
-  tempAIT <- tempAIT[order(Sex,Gew_klasse,Zeugnr,Rand)] #sort data by sex, weight class, sow ID, and random number column
+  tempAIT <- tempAIT[base::order(Sex,Gew_klasse,Zeugnr,Rand)] #sort data by sex, weight class, sow ID, and random number column
 
   #assign pen numbers
-  if(nWC==1){tempAIT$Hok <- c(rep(1:x,nH), rep((x+1):(x+y),nH))}
-  if(nWC==2){tempAIT$Hok <- c(rep(1:x,nH), rep((x+1):(2*x),nH), rep((2*x+1):(2*x+y),nH), rep((2*x+1+y):(2*x+2*y),nH))}
-  if(nWC==3){tempAIT$Hok <- c(rep(1:x,nH), rep((x+1):(2*x),nH), rep((2*x+1):(3*x),nH), rep((3*x+1):(3*x+y),nH), rep((3*x+1+y):(3*x+2*y),nH), rep((3*x+1+2*y):(3*x+3*y),nH))}
+  if(nWC==1){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(x+y),nH))}
+  if(nWC==2){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(2*x),nH), base::rep((2*x+1):(2*x+y),nH), base::rep((2*x+1+y):(2*x+2*y),nH))}
+  if(nWC==3){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(2*x),nH), base::rep((2*x+1):(3*x),nH), base::rep((3*x+1):(3*x+y),nH), base::rep((3*x+1+y):(3*x+2*y),nH), base::rep((3*x+1+2*y):(3*x+3*y),nH))}
 
-  print("Mean weight per pen before:")
-  print(tempAIT[,mean(Speen_gew),Hok]) #print the initial mean weights of each pen
+  base::print("Mean weight per pen before:")
+  base::print(tempAIT[,base::mean(Speen_gew),Hok]) #print the initial mean weights of each pen
 
-  for (i in seq(1,(x*nWC),by=x)){
-    tempAIT <- tempAIT[order(Sex,Gew_klasse,Hok)]
+  for (i in base::seq(1,(x*nWC),by=x)){
+    tempAIT <- tempAIT[base::order(Sex,Gew_klasse,Hok)]
     partPens <- tempAIT[Hok%in%c(i:(i+x-1))]
 
     partPens <- switchInPen(partPens)
@@ -132,8 +132,8 @@ assignPens <- function(data, nH, nWC=3){
     tempAIT[Hok%in%c(i:(i+x-1))] <- partPens
   }
 
-  for (i in seq(x*nWC+1,(x*nWC+nWC*y),by=y)){
-    tempAIT <- tempAIT[order(Sex,Gew_klasse,Hok)]
+  for (i in base::seq(x*nWC+1,(x*nWC+nWC*y),by=y)){
+    tempAIT <- tempAIT[base::order(Sex,Gew_klasse,Hok)]
     partPens <- tempAIT[Hok%in%c(i:(i+y-1))]
 
     partPens <- switchInPen(partPens)
@@ -141,14 +141,14 @@ assignPens <- function(data, nH, nWC=3){
     tempAIT[Hok%in%c(i:(i+y-1))] <- partPens
   }
 
-  tempAIT <- tempAIT[order(Sex,Gew_klasse,Hok)]
+  tempAIT <- tempAIT[base::order(Sex,Gew_klasse,Hok)]
 
-  print("Mean weight per pen after:")
-  print(tempAIT[,mean(Speen_gew),Hok])
+  base::print("Mean weight per pen after:")
+  base::print(tempAIT[,base::mean(Speen_gew),Hok])
 
-  if (nrow(tempAIT[,sum(duplicated(Zeugnr)),Hok][V1 != 0]) != 0){
-    print("The following pens contain siblings:")
-    print(tempAIT[,sum(duplicated(Zeugnr)),Hok][V1 != 0])
+  if (base::nrow(tempAIT[,base::sum(base::duplicated(Zeugnr)),Hok][V1 != 0]) != 0){
+    base::print("The following pens contain siblings:")
+    base::print(tempAIT[,sum(duplicated(Zeugnr)),Hok][V1 != 0])
   }
 
   return(tempAIT)
