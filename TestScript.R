@@ -8,27 +8,40 @@ animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Geel","Groen","Rood"))
 animalsInTrial <- assignComp(animalsInTrial)
 table(animalsInTrial$Comp,animalsInTrial$Gew_klasse,animalsInTrial$Beh)
 
-group_by
+data <- biggen
 
-comp<-data.table(Pen=c(2,3,4,5,16,18,20,22,9,10,11,12,13,14,15,19,1,6,7,8,17,21,23,24),Sex=rep(c("B","B","B","B","Z","Z","Z","Z"),3),Weight=c("L","L","L","M","L","M","M","Z","Z","Z","Z","Z","L","L","L","M","L","M","M","M","M","Z","Z","Z"),Treatment=c("G","W","W","G","W","G","W","G","G","G","W","W","G","G","W","W","G","G","W","W","G","G","W","W"))
+buitenProef <- data[!base::is.na(Opm.)] #All piglets with comments to be left out of trial
+tempBiggen <- data[base::is.na(Opm.)] #For now keep all piglets without comments in the trial
 
-comp <- comp[order(Sex,Treatment,Weight)]
+tempBiggen <- tempBiggen[base::order(Sex,Speen_gew)] #sort piglets by sex and weaning weight
 
-test <-fold(comp[Treatment=="W"&Sex=="B"][c(1,3,5)], k = 3,method="n_dist")
+biggenB <- tempBiggen[Sex=="B"] #select only barrows
+biggenZ <- tempBiggen[Sex=="Z"] #select only gilts
 
-table(test$.folds,test$Weight)
-table(test$.folds,test$Treatment)
-table(test$.folds,test$Sex)
+test<-data.frame(sex=c("m","m","f","f","m","m","f","m","f","m"),weight=runif(10,5,9))
 
-table(animalsInTrial$Comp,animalsInTrial$Gew_klasse)
-chi<- chisq.test(table(animalsInTrial$Comp,animalsInTrial$Gew_klasse))
-chi$p.value
-table(animalsInTrial$Comp,animalsInTrial$Beh)
-table(animalsInTrial$Comp,animalsInTrial$Sex)
+library("plotly")
+library("shiny")
+library("DT")
 
-biggen <- bind_rows(animalsInTrial,animalsOutTrial)
-write.table(biggen,file = "Output/biggen.txt",sep="|",dec=".",na="NA",row.names = F)
+ui <- fluidPage(
+  mainPanel(
+    plotlyOutput("plot")
+  ),
+  DT::dataTableOutput('tbl')
+)
 
-devtools::install_github("DataZhukov/animalTrial")
+server <- function(input, output, session) {
+  output$plot <- renderPlotly({
+    p <- plot_ly(x = test$weight, type = "histogram")
+  })
 
-sowids <- rownames(table(partPens$Zeugnr,partPens$Hok)[table(partPens$Zeugnr,partPens$Hok) == 1])
+
+  output$tbl <- renderDataTable({
+    s <- event_data("plotly_selected")
+    s
+  })
+
+}
+
+shinyApp(ui, server)
