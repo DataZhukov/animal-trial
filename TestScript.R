@@ -18,30 +18,3 @@ tempBiggen <- tempBiggen[base::order(Sex,Speen_gew)] #sort piglets by sex and we
 biggenB <- tempBiggen[Sex=="B"] #select only barrows
 biggenZ <- tempBiggen[Sex=="Z"] #select only gilts
 
-test<-data.frame(sex=c("m","m","f","f","m","m","f","m","f","m"),weight=runif(10,5,9))
-
-library("plotly")
-library("shiny")
-library("DT")
-
-ui <- fluidPage(
-  mainPanel(
-    plotlyOutput("plot")
-  ),
-  DT::dataTableOutput('tbl')
-)
-
-server <- function(input, output, session) {
-  output$plot <- renderPlotly({
-    p <- plot_ly(x = test$weight, type = "histogram")
-  })
-
-
-  output$tbl <- renderDataTable({
-    s <- event_data("plotly_selected")
-    s
-  })
-
-}
-
-shinyApp(ui, server)

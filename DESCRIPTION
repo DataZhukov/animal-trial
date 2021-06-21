@@ -19,4 +19,5 @@ Imports:
   data.table,
   NMOF,
   stats,
-  groupdata2
+  groupdata2,
+  goeveg

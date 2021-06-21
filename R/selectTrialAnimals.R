@@ -9,12 +9,13 @@
 #' @param maxWeight numeric maximum weight of piglets to be selected
 #'
 #' @details If not enough piglets meet the in trial criteria the function removes the lowest weight animals until it is left with the required amount.
-#' The function tries to select piglets in such a way that the mean weaning weight of the barrows in trial is close to the mean weaning weight of the gilts in trial.
+#' The function tries to select piglets in such a way that the Coefficient of Variation op weaning weights is minimized
 #'
 #' @return list with elements animalsInTrial (piglets selected for trial) and animalsOutTrial (piglets left out of trial)
 #' @export
 #'
 #' @import data.table
+#' @import goeveg
 #'
 #' @examples
 #' animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
@@ -49,11 +50,11 @@ selectTrialAnimals <- function(data, nB, nZ, minWeight,maxWeight){
   while (base::nrow(biggenB) > nB| base::nrow(biggenZ) > nZ){ #repeat until we have the required number of barrows and gilts
     #for barrows:
     if (base::nrow(biggenB) > nB){ #if the number of barrows exceeds the required amount
-      if (biggenB[,base::mean(Speen_gew)] > (biggenZ[,base::mean(Speen_gew)])){ #if the mean weaning weight of barrows in trial is higher then the mean weaning weight of the gilts in trial
+      if (biggenB[-1,goeveg::cv(Speen_gew)] >= biggenB[-base::nrow(biggenB),goeveg::cv(Speen_gew)]){ #if the CV is lower with heaviest removed compared to with lightest removed
         tempBuitenProefB <- base::rbind(tempBuitenProefB,biggenB[base::nrow(biggenB)]) #move the heaviest male piglet out of trial
         biggenB <- biggenB[-base::nrow(biggenB)] #remove the heaviest male piglet from the in trial piglets
       }
-      if (biggenB[,base::mean(Speen_gew)] < (biggenZ[,base::mean(Speen_gew)])){ #if the mean weaning weight of barrows in trial is lower then the mean weaning weight of the gilts in trial
+      else {
         tempBuitenProefB <- base::rbind(tempBuitenProefB,biggenB[1]) #move the lightest male piglet out of trial
         biggenB <- biggenB[-1] #remove the lightest male piglet from the in trial piglets
       }
@@ -61,11 +62,11 @@ selectTrialAnimals <- function(data, nB, nZ, minWeight,maxWeight){
 
     #for gilts:
     if (base::nrow(biggenZ) > nZ){ #if the number of gilts exceeds the required amount
-      if (biggenZ[,base::mean(Speen_gew)] > (biggenB[,base::mean(Speen_gew)])){ #if the mean weaning weight of gilts in trial is higher then the mean weaning weight of the barrows in trial
+      if (biggenZ[-1,goeveg::cv(Speen_gew)] >= biggenZ[-base::nrow(biggenZ),goeveg::cv(Speen_gew)]){ #if the CV is lower with heaviest removed compared to with lightest removed
         tempBuitenProefZ <- base::rbind(tempBuitenProefZ,biggenZ[base::nrow(biggenZ)]) #move the heaviest female piglet out of trial
         biggenZ <- biggenZ[-base::nrow(biggenZ)] #remove the heaviest female piglet from the in trial piglets
       }
-      if (biggenZ[,base::mean(Speen_gew)] < (biggenB[,base::mean(Speen_gew)])){ #if the mean weaning weight of gilts in trial is lower then the mean weaning weight of the barrows in trial
+      else {
         tempBuitenProefZ <- base::rbind(tempBuitenProefZ,biggenZ[1]) #move the lightest female piglet out of trial
         biggenZ <- biggenZ[-1] #remove the lightest female piglet from the in trial piglets
       }
@@ -78,6 +79,8 @@ selectTrialAnimals <- function(data, nB, nZ, minWeight,maxWeight){
 
   print(paste("Mean weight B in trial = ",biggenB[,base::mean(Speen_gew)])) #print the mean weaning weight of the barrows in trial
   print(paste("Mean weight Z in trial = ",biggenZ[,base::mean(Speen_gew)])) #print the mean weaning weight of the gilts in trial
+  print(paste("Coefficient of Variation B in trial = ",biggenB[,goeveg::cv(Speen_gew)])) #print the CV weaning weight of the barrows in trial
+  print(paste("Coefficient of Variation Z in trial = ",biggenZ[,goeveg::cv(Speen_gew)])) #print the CV weaning weight of the gilts in trial
 
   return(base::list(animalsInTrial = tempBiggen, animalsOutTrial = tempBuitenProef)) #return a list with the in trial piglets and the out of trial piglets
 }
