@@ -8,13 +8,22 @@ animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Geel","Groen","Rood"))
 animalsInTrial <- assignComp(animalsInTrial)
 table(animalsInTrial$Comp,animalsInTrial$Gew_klasse,animalsInTrial$Beh)
 
-data <- biggen
+data <- animalsInTrial
 
-buitenProef <- data[!base::is.na(Opm.)] #All piglets with comments to be left out of trial
-tempBiggen <- data[base::is.na(Opm.)] #For now keep all piglets without comments in the trial
+x <- base::nrow(data[Sex=="B"])  / (nWC * nH)
+y <- base::nrow(data[Sex=="Z"])  / (nWC * nH)
 
-tempBiggen <- tempBiggen[base::order(Sex,Speen_gew)] #sort piglets by sex and weaning weight
+tempAIT <- data
 
-biggenB <- tempBiggen[Sex=="B"] #select only barrows
-biggenZ <- tempBiggen[Sex=="Z"] #select only gilts
+tempAIT <- createWeightClass(tempAIT,nWC) #create weight classes
+
+tempAIT$Rand <- stats::runif(base::nrow(tempAIT),0,1) #create variable of random numbers
+
+tempAIT <- tempAIT[base::order(Sex,Gew_klasse,Zeugnr,Rand)] #sort data by sex, weight class, sow ID, and random number column
+
+#assign pen numbers
+if(nWC==1){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(x+y),nH))}
+if(nWC==2){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(2*x),nH), base::rep((2*x+1):(2*x+y),nH), base::rep((2*x+1+y):(2*x+2*y),nH))}
+if(nWC==3){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(2*x),nH), base::rep((2*x+1):(3*x),nH), base::rep((3*x+1):(3*x+y),nH), base::rep((3*x+1+y):(3*x+2*y),nH), base::rep((3*x+1+2*y):(3*x+3*y),nH))}
+
 

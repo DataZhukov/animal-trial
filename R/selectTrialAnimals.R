@@ -34,8 +34,13 @@ selectTrialAnimals <- function(data, nB, nZ, minWeight,maxWeight){
     tempBuitenProefB <- biggenB[Speen_gew < minWeight & Speen_gew > maxWeight] #move all piglets that don't meet weight criteria out of trial
     biggenB <- biggenB[Speen_gew >= minWeight | Speen_gew <= maxWeight] #move all piglets that do meet weight criteria in the trial
   }else{ #if there is a shortage of piglets that meet the weight criteria
-    tempBuitenProefB <- biggenB[1: (base::nrow(biggenB) - nB)] #move the lowest weight piglets to out of trial until we have the required number of piglets
-    biggenB <- biggenB[(base::nrow(biggenB) - nB + 1):base::nrow(biggenB)] #move the remaining piglets in trial
+    if (nrow(biggenB) > nB){
+      tempBuitenProefB <- biggenB[1: (base::nrow(biggenB) - nB)] #move the lowest weight piglets to out of trial until we have the required number of piglets
+      biggenB <- biggenB[(base::nrow(biggenB) - nB + 1):base::nrow(biggenB)] #move the remaining piglets in trial
+    }else{
+      print(base::paste("Not enough barrows, number of selected barrows (",base::nrow(biggenB),") is lower than desired (",nB,")",sep=""))
+      tempBuitenProefB <-biggenB[0]
+      }
   }
 
   #for gilts:
@@ -43,8 +48,13 @@ selectTrialAnimals <- function(data, nB, nZ, minWeight,maxWeight){
     tempBuitenProefZ <- biggenZ[Speen_gew < minWeight | Speen_gew > maxWeight] #move all piglets that don't meet weight criteria out of trial
     biggenZ <- biggenZ[Speen_gew >= minWeight & Speen_gew <= maxWeight] #move all piglets that do meet weight criteria in the trial
   }else{ #if there is a shortage of piglets that meet the weight criteria
-    tempBuitenProefZ <- biggenZ[1: (base::nrow(biggenZ) - nZ)] #move the lowest weight piglets to out of trial until we have the required number of piglets
-    biggenZ <- biggenZ[(base::nrow(biggenZ) - nZ + 1):base::nrow(biggenZ)] #move the remaining piglets in trial
+    if (nrow(biggenZ) > nZ){
+      tempBuitenProefZ <- biggenZ[1: (base::nrow(biggenZ) - nZ)] #move the lowest weight piglets to out of trial until we have the required number of piglets
+      biggenZ <- biggenZ[(base::nrow(biggenZ) - nZ + 1):base::nrow(biggenZ)] #move the remaining piglets in trial
+    }else{
+      print(base::paste("Not enough gilst, number of selected gilts (",base::nrow(biggenZ),") is lower than desired (",nZ,")",sep=""))
+      tempBuitenProefZ <-biggenZ[0]
+    }
   }
 
   while (base::nrow(biggenB) > nB| base::nrow(biggenZ) > nZ){ #repeat until we have the required number of barrows and gilts
