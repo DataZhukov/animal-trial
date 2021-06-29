@@ -3,19 +3,19 @@
 animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
 animalsOutTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[2]]
 min(animalsInTrial$Speen_gew)
-animalsInTrial <- assignPens(animalsInTrial,6,nWC=3)
+animalsInTrial <- assignPens(animalsInTrial,6)
 animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Geel","Groen","Rood"))
 animalsInTrial <- assignComp(animalsInTrial)
 table(animalsInTrial$Comp,animalsInTrial$Gew_klasse,animalsInTrial$Beh)
 
 data <- animalsInTrial
 
-x <- base::nrow(data[Sex=="B"])  / (nWC * nH)
-y <- base::nrow(data[Sex=="Z"])  / (nWC * nH)
+x <- base::nrow(data[Sex=="B"])  / (4 * 6)
+y <- base::nrow(data[Sex=="Z"])  / (4 * 6)
 
 tempAIT <- data
 
-tempAIT <- createWeightClass(tempAIT,nWC) #create weight classes
+tempAIT <- createWeightClass(tempAIT,4) #create weight classes
 
 tempAIT$Rand <- stats::runif(base::nrow(tempAIT),0,1) #create variable of random numbers
 

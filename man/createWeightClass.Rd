@@ -9,7 +9,7 @@ createWeightClass(data, nWC = 3)
 \arguments{
 \item{data}{data.table}
 
-\item{nWC}{numeric number of weight classes to assign can be 1, 2, or 3}
+\item{nWC}{numeric number of weight classes to assign can be 1, 2, 3 or 4}
 }
 \value{
 data.table

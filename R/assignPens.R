@@ -3,13 +3,13 @@
 #'Assigns weight class to each piglet
 #'
 #' @param data data.table
-#' @param nWC numeric number of weight classes to assign can be 1, 2, or 3
+#' @param nWC numeric number of weight classes to assign can be 1, 2, 3 or 4
 #'
 #' @return data.table
 createWeightClass <- function(data, nWC=3){
   Sex <- Speen_gew <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
 
-  if(!(nWC %in% c(1,2,3))){base::stop("Can only have 1, 2, or 3 weight classes")}
+  if(!(nWC %in% c(1,2,3,4))){base::stop("Can only have 1, 2, 3 or 4 weight classes")}
 
   data <- data[base::order(Sex,Speen_gew)] #Sort piglets by sex and weaning weight
 
@@ -20,6 +20,7 @@ createWeightClass <- function(data, nWC=3){
   if(nWC==1){data$Gew_klasse <- base::as.factor(c(base::rep("M",x),base::rep("M",x)))}
   if(nWC==2){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("Z",x),base::rep("L",x),base::rep("Z",x)))}
   if(nWC==3){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("M",x),base::rep("Z",x),base::rep("L",x),base::rep("M",x),base::rep("Z",x)))}
+  if(nWC==4){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("ML",x),base::rep("MZ",x),base::rep("Z",x),base::rep("L",x),base::rep("ML",x),base::rep("MZ",x),base::rep("Z",x)))}
 
   return(data)
 }
@@ -51,8 +52,10 @@ OF <- function(x, data, ...){
 nb <- function(x, data, sowids) {
   s <- sowids[base::sample(base::length(sowids), 1)] #select random sow ID
   ij <- base::sample(base::which(data$Zeugnr == s))[1:2] #select sibling of this sow together with individual sow
+  if(data$Sex[ij[1]] == data$Sex[ij[2]]){
   x[ij] <- x[base::rev(ij)] #switch pens for these siblings
   x #return pen vector with switch
+  }else{x}
 }
 
 #' Avoid siblings in pens
@@ -86,6 +89,7 @@ switchInPen <- function(data){
 #' @param data data.table with columns Zeugnr (sow ID),  Sex (sex of piglets), and Speen_gew (weaning weights of piglets)
 #' @param nH numeric number of piglets to be housed in each pen
 #' @param nWC numeric number of weight classes to be created (default = 3)
+#' @param separateSex boolean Should barrows and gilts be kept in separate pens (default = TRUE)? If FALSE, the number of barrows and gilts should be equal in total and per pen.
 #'
 #' @return data.table with added column Hok (pen)
 #' @export
@@ -95,7 +99,7 @@ switchInPen <- function(data){
 #' @examples
 #' animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
 #' animalsInTrial <- assignPens(animalsInTrial,6)
-assignPens <- function(data, nH, nWC=3){
+assignPens <- function(data, nH, nWC=3, separateSex = T){
   Sex <- Gew_klasse <- Zeugnr <- Rand <-Speen_gew <- Hok <- V1 <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
 
   if((base::nrow(data[Sex=="B"]) %% nH) != 0){stop("Number of barrows is not a multiple of number of piglets per pen")}
@@ -115,10 +119,20 @@ assignPens <- function(data, nH, nWC=3){
 
   tempAIT <- tempAIT[base::order(Sex,Gew_klasse,Zeugnr,Rand)] #sort data by sex, weight class, sow ID, and random number column
 
+  if(separateSex==F){
+    B <- tempAIT$Sex == "B"
+    xB <- integer(length(B))
+    xB[B] <- cumsum(rep(c((x*(nH/2)) - 1,rep(0,(x*(nH/2)) - 1)), length.out=sum(B))) - 1
+    xB[!B] <- cumsum(rep(c((x*(nH/2)) - 1,rep(0,(x*(nH/2)) - 1)), length.out=sum(!B)))
+    tempAIT <- tempAIT[order(xB),]
+    tempAIT[Sex=="Z"] <- tempAIT[Sex=="Z"][order(Gew_klasse,-Zeugnr),]
+  }
+
   #assign pen numbers
   if(nWC==1){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(x+y),nH))}
   if(nWC==2){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(2*x),nH), base::rep((2*x+1):(2*x+y),nH), base::rep((2*x+1+y):(2*x+2*y),nH))}
   if(nWC==3){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(2*x),nH), base::rep((2*x+1):(3*x),nH), base::rep((3*x+1):(3*x+y),nH), base::rep((3*x+1+y):(3*x+2*y),nH), base::rep((3*x+1+2*y):(3*x+3*y),nH))}
+  if(nWC==4){tempAIT$Hok <- c(base::rep(1:x,nH), base::rep((x+1):(2*x),nH), base::rep((2*x+1):(3*x),nH), base::rep((3*x+1):(4*x),nH), base::rep((4*x+1):(4*x+y),nH), base::rep((4*x+1+y):(4*x+2*y),nH), base::rep((4*x+1+2*y):(4*x+3*y),nH), base::rep((4*x+1+3*y):(4*x+4*y),nH))}
 
   base::print("Mean weight per pen before:")
   base::print(tempAIT[,base::mean(Speen_gew),Hok]) #print the initial mean weights of each pen

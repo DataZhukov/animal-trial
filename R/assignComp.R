@@ -19,8 +19,15 @@
 #' animalsInTrial <- assignComp(animalsInTrial)
 assignComp <- function(data,nPC=8, etime=10){
   Sex <- Gew_klasse <- Beh <- Hok <- Comp <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
-  comp <- data[,base::list(base::unique(Sex),base::unique(Gew_klasse),base::unique(Beh)),Hok]
-  base::names(comp) <- c("Hok","Sex","Gew_klasse","Beh")
+  separateSex <- length(data[Hok==1,unique(Sex)]) == 1
+
+  if(separateSex == T){
+    comp <- data[,base::list(base::unique(Sex),base::unique(Gew_klasse),base::unique(Beh)),Hok]
+    base::names(comp) <- c("Hok","Sex","Gew_klasse","Beh")}else{
+    comp <- data[,base::list(base::unique(Gew_klasse),base::unique(Beh)),Hok]
+    base::names(comp) <- c("Hok","Gew_klasse","Beh")
+  }
+
   x <- base::nrow(comp) / nPC #determine number of compartments
   beh <- base::unique(data$Beh)
 
@@ -31,25 +38,37 @@ assignComp <- function(data,nPC=8, etime=10){
 
 while (chi.p < alpha) {
 
-  compNewB <- base::data.frame()
-  for (i in 1:base::length(beh)) {
-    compTempB <- comp[Beh==beh[i]&Sex=="B"] #select pens for a treatment and barrow combination
+  if(separateSex == T){
+    compNewB <- base::data.frame()
+    for (i in 1:base::length(beh)) {
+      compTempB <- comp[Beh==beh[i]&Sex=="B"] #select pens for a treatment and barrow combination
 
-    compTempB <- groupdata2::fold(compTempB, k = x,method="n_dist") #distribute those pens over the x compartments randomly but evenly
+      compTempB <- groupdata2::fold(compTempB, k = x,method="n_dist") #distribute those pens over the x compartments randomly but evenly
 
-    compNewB <- base::rbind(compNewB,compTempB)
+      compNewB <- base::rbind(compNewB,compTempB)
+    }
+
+    compNewZ<-base::data.frame()
+    for (i in 1:base::length(beh)) {
+      compTempZ <- comp[Beh==beh[i]&Sex=="Z"] #select pens for a treatment and gilt combination
+
+      compTempZ <- groupdata2::fold(compTempZ, k = x,method="n_dist") #distribute those pens over the x compartments randomly but evenly
+
+      compNewZ <- base::rbind(compNewZ,compTempZ)
+    }
+
+    compNew <- base::rbind(compNewB,compNewZ) #this is lookup table which shows which pens go to which compartment
+
+  }else{
+    compNew <- base::data.frame()
+    for (i in 1:base::length(beh)) {
+      compTemp <- comp[Beh==beh[i]] #select pens for a treatment
+
+      compTemp <- groupdata2::fold(compTemp, k = x,method="n_dist") #distribute those pens over the x compartments randomly but evenly
+
+      compNew <- base::rbind(compNew,compTemp)
+    }
   }
-
-  compNewZ<-base::data.frame()
-  for (i in 1:base::length(beh)) {
-    compTempZ <- comp[Beh==beh[i]&Sex=="Z"] #select pens for a treatment and gilt combination
-
-    compTempZ <- groupdata2::fold(compTempZ, k = x,method="n_dist") #distribute those pens over the x compartments randomly but evenly
-
-    compNewZ <- base::rbind(compNewZ,compTempZ)
-  }
-
-  compNew <- base::rbind(compNewB,compNewZ) #this is lookup table which shows which pens go to which compartment
 
   tempAIT <- data
   tempAIT$Comp <- tempAIT$Hok

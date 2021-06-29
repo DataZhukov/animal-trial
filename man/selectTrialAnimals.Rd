@@ -25,7 +25,7 @@ Select which animals to include and which to exclude from the trial
 }
 \details{
 If not enough piglets meet the in trial criteria the function removes the lowest weight animals until it is left with the required amount.
-The function tries to select piglets in such a way that the mean weaning weight of the barrows in trial is close to the mean weaning weight of the gilts in trial.
+The function tries to select piglets in such a way that the Coefficient of Variation op weaning weights is minimized
 }
 \examples{
 animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]

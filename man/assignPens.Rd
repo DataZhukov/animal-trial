@@ -4,7 +4,7 @@
 \alias{assignPens}
 \title{Assign piglets to pens}
 \usage{
-assignPens(data, nH, nWC = 3)
+assignPens(data, nH, nWC = 3, separateSex = T)
 }
 \arguments{
 \item{data}{data.table with columns Zeugnr (sow ID),  Sex (sex of piglets), and Speen_gew (weaning weights of piglets)}
@@ -12,6 +12,8 @@ assignPens(data, nH, nWC = 3)
 \item{nH}{numeric number of piglets to be housed in each pen}
 
 \item{nWC}{numeric number of weight classes to be created (default = 3)}
+
+\item{separateSex}{boolean Should barrows and gilts be kept in separate pens (default = TRUE)? If FALSE, the number of barrows and gilts should be equal in total and per pen.}
 }
 \value{
 data.table with added column Hok (pen)
