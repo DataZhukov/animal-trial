@@ -14,6 +14,8 @@
 #' animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Groen","Rood","Geel"))
 assignTreatment <- function(data,beh){
   Sex <- Gew_klasse <- Hok <- Speen_gew <- Beh <- NULL #To prevent 'no visible binding' note according to https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
+  separateSex <- length(data[Hok==1,unique(Sex)]) == 1
+
   treat <- data[base::order(Sex,Gew_klasse,Hok)] #sort data by sex, weight class and pen
 
   nWC <- base::length(base::unique(treat$Gew_klasse))
@@ -24,6 +26,10 @@ assignTreatment <- function(data,beh){
 
   if(x %% nH != 0){stop("Number of barrows assigned to a treatment is not a multiple of the number of animals per pen, try running assignPens again with different number of weight classes.")}
   if(y %% nH != 0){stop("Number of gilts assigned to a treatment is not a multiple of the number of animals per pen, try running assignPens again with different number of weight classes.")}
+
+  if(separateSex==F){
+    treat <- data[base::order(Gew_klasse,Hok)] #sort data by sex, weight class and pen
+  }
 
   treat$Beh <- c(base::rep(base::sort(base::rep(beh,x)),nWC),base::rep(base::sort(base::rep(beh,y)),nWC))
 

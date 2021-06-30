@@ -1,9 +1,9 @@
 #Test script - use to test out package functions
 
-animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
+animalsInTrial <- selectTrialAnimals(biggen,60,60,5.4,9.5)[[1]]
 animalsOutTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[2]]
 min(animalsInTrial$Speen_gew)
-animalsInTrial <- assignPens(animalsInTrial,6)
+animalsInTrial <- assignPens(animalsInTrial,5,separateSex = F)
 animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Geel","Groen","Rood"))
 animalsInTrial <- assignComp(animalsInTrial)
 table(animalsInTrial$Comp,animalsInTrial$Gew_klasse,animalsInTrial$Beh)

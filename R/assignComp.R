@@ -32,7 +32,7 @@ assignComp <- function(data,nPC=8, etime=10){
   beh <- base::unique(data$Beh)
 
   chi.p <- 0
-  alpha <- 0.1
+  alpha <- 0.6
   mult <- 0
   start_time <- base::Sys.time()
 
@@ -43,7 +43,7 @@ while (chi.p < alpha) {
     for (i in 1:base::length(beh)) {
       compTempB <- comp[Beh==beh[i]&Sex=="B"] #select pens for a treatment and barrow combination
 
-      compTempB <- groupdata2::fold(compTempB, k = x,method="n_dist") #distribute those pens over the x compartments randomly but evenly
+      compTempB <- groupdata2::fold(compTempB, k = x,method="n_rand") #distribute those pens over the x compartments randomly but evenly
 
       compNewB <- base::rbind(compNewB,compTempB)
     }
@@ -52,7 +52,7 @@ while (chi.p < alpha) {
     for (i in 1:base::length(beh)) {
       compTempZ <- comp[Beh==beh[i]&Sex=="Z"] #select pens for a treatment and gilt combination
 
-      compTempZ <- groupdata2::fold(compTempZ, k = x,method="n_dist") #distribute those pens over the x compartments randomly but evenly
+      compTempZ <- groupdata2::fold(compTempZ, k = x,method="n_rand") #distribute those pens over the x compartments randomly but evenly
 
       compNewZ <- base::rbind(compNewZ,compTempZ)
     }
@@ -64,7 +64,7 @@ while (chi.p < alpha) {
     for (i in 1:base::length(beh)) {
       compTemp <- comp[Beh==beh[i]] #select pens for a treatment
 
-      compTemp <- groupdata2::fold(compTemp, k = x,method="n_dist") #distribute those pens over the x compartments randomly but evenly
+      compTemp <- groupdata2::fold(compTemp, k = x,method="n_rand") #distribute those pens over the x compartments randomly but evenly
 
       compNew <- base::rbind(compNew,compTemp)
     }
