@@ -17,10 +17,10 @@ createWeightClass <- function(data, nWC=3){
   y <- base::nrow(data[Sex=="Z"]) / nWC #Size of each weight class for gilts
 
   #Assign weight class to each piglet
-  if(nWC==1){data$Gew_klasse <- base::as.factor(c(base::rep("M",x),base::rep("M",x)))}
-  if(nWC==2){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("Z",x),base::rep("L",x),base::rep("Z",x)))}
-  if(nWC==3){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("M",x),base::rep("Z",x),base::rep("L",x),base::rep("M",x),base::rep("Z",x)))}
-  if(nWC==4){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("ML",x),base::rep("MZ",x),base::rep("Z",x),base::rep("L",x),base::rep("ML",x),base::rep("MZ",x),base::rep("Z",x)))}
+  if(nWC==1){data$Gew_klasse <- base::as.factor(c(base::rep("M",x),base::rep("M",y)))}
+  if(nWC==2){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("Z",x),base::rep("L",y),base::rep("Z",y)))}
+  if(nWC==3){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("M",x),base::rep("Z",x),base::rep("L",y),base::rep("M",y),base::rep("Z",y)))}
+  if(nWC==4){data$Gew_klasse <- base::as.factor(c(base::rep("L",x),base::rep("ML",x),base::rep("MZ",x),base::rep("Z",x),base::rep("L",y),base::rep("ML",y),base::rep("MZ",y),base::rep("Z",y)))}
 
   return(data)
 }
