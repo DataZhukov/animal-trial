@@ -25,4 +25,8 @@ Imports:
   goeveg,
   doBy,
   ggplot2,
-  RColorBrewer
+  RColorBrewer,
+  car,
+  emmeans,
+  multcomp,
+  lmerTest

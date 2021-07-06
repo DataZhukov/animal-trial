@@ -48,3 +48,12 @@ split(animalsInTrial, cut(seq_along(animalsInTrial), 2, labels = FALSE))
 boxplotZoo(var="Weight",treatment="behandeling1",lab="Treatment",
        group1="faseW",group2="ronde",group3 = "sex",lab2="Round",data=groeidataLong,pen="hok",xlab="Treatment groups per phase",
        ylab= "Weight (kg)")
+
+hok <- groeidata[!is.na(groeidata$dgtot),]
+test <- modelsZoo(groeidataLong,VARnames = c("geinde","dgtot"),effects = "behandeling1+gbegin+(1|compartiment/ronde)")
+data <- groeidataLong
+VARnames <- c("Weight","Daily_gain","Daily_feed_intake","Feed_conversion_ratio")
+effects <- "faseW+behandeling1+ronde+faseW:behandeling1+ronde:behandeling1+gbegin+(1|hok)"
+group1 <- "faseW"
+treatment <- "behandeling1"
+precision <- 2
