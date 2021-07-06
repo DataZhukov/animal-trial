@@ -23,4 +23,6 @@ Imports:
   stats,
   groupdata2,
   goeveg,
-  doBy
+  doBy,
+  ggplot2,
+  RColorBrewer

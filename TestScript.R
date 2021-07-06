@@ -43,3 +43,8 @@ dummies <- data.frame(Sex=c(rep("B",nBShort),rep("Z",nZShort)),Oornr=c(1:(nBShor
 
 split(animalsInTrial, ceiling(seq_along(animalsInTrial)/3))
 split(animalsInTrial, cut(seq_along(animalsInTrial), 2, labels = FALSE))
+
+
+boxplotZoo(var="Weight",treatment="behandeling1",lab="Treatment",
+       group1="faseW",group2="ronde",group3 = "sex",lab2="Round",data=groeidataLong,pen="hok",xlab="Treatment groups per phase",
+       ylab= "Weight (kg)")
