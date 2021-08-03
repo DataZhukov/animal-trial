@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeLong.R
 \name{makeLong}
 \alias{makeLong}
-\title{Put zootechnical dat in suitable format}
+\title{Put zootechnical data in suitable format}
 \usage{
 makeLong(
   data,
@@ -19,13 +19,13 @@ makeLong(
 
 \item{vars}{character vector of variable names for zootechnical parameters in data}
 
-\item{VARfasenames}{character vector of names to be used for these paramters in reshaped data.frame}
+\item{VARfasenames}{character vector of names to be used for these parameters in reshaped data.frame}
 }
 \value{
 data.table with zootechnical parameters in long format over phases
 }
 \description{
-Put zootechnical dat in suitable format
+Put zootechnical data in suitable format
 }
 \examples{
 groeidataLong <- makeLong(groeidata,2)

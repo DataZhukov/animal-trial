@@ -1,12 +1,18 @@
 #Test script - use to test out package functions
 
-animalsInTrial <- selectTrialAnimals(biggen,60,60,5.4,9.5)[[1]]
+animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
 animalsOutTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[2]]
 min(animalsInTrial$Speen_gew)
-animalsInTrial <- assignPens(animalsInTrial,5,separateSex = F)
+animalsInTrial <- assignPens(animalsInTrial,6,separateSex = T)
 animalsInTrial <- assignTreatment(animalsInTrial,c("Wit","Geel","Groen","Rood"))
 animalsInTrial <- assignComp(animalsInTrial)
 table(animalsInTrial$Comp,animalsInTrial$Gew_klasse,animalsInTrial$Beh)
+exportResult(animalsInTrial,animalsOutTrial)
+trialSummary(animalsInTrial)
+
+groeidataLong <- makeLong(groeidata,2)
+boxplotZoo(data=groeidataLong,var="Weight",xlab="Treatment groups per phase",ylab= "Weight (kg)")
+tabel <- modelsZoo(groeidataLong,VARnames = c("geinde","dgtot"),effects = "behandeling1+gbegin+(1|compartiment/ronde)")
 
 data <- animalsInTrial
 
@@ -50,7 +56,7 @@ boxplotZoo(var="Weight",treatment="behandeling1",lab="Treatment",
        ylab= "Weight (kg)")
 
 hok <- groeidata[!is.na(groeidata$dgtot),]
-test <- modelsZoo(groeidataLong,VARnames = c("geinde","dgtot"),effects = "behandeling1+gbegin+(1|compartiment/ronde)")
+test <- modelsZoo(groeidataLong,VARnames = c("geinde","dvotot"),effects = "behandeling1+gbegin+(1|compartiment/ronde)")
 data <- groeidataLong
 VARnames <- c("Weight","Daily_gain","Daily_feed_intake","Feed_conversion_ratio")
 effects <- "faseW+behandeling1+ronde+faseW:behandeling1+ronde:behandeling1+gbegin+(1|hok)"

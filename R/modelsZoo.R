@@ -1,13 +1,13 @@
-#' Title
+#' Run models for each parameter
 #'
-#' @param data
-#' @param precision
-#' @param VARnames
-#' @param effects
-#' @param treatment
-#' @param group1
+#' @param data data.table
+#' @param precision numeric number of digits after the decimal
+#' @param VARnames character vector of variables to use from data
+#' @param effects formula for starting model
+#' @param treatment character name of treatment variable
+#' @param group1 character name of second grouping variable, typically faseW
 #'
-#' @return
+#' @return table of means and sd with significance codes
 #' @export
 #'
 #' @import lmerTest
@@ -16,6 +16,8 @@
 #' @import multcomp
 #'
 #' @examples
+#' groeidataLong <- makeLong(groeidata,2)
+#' tabel <- modelsZoo(groeidataLong,VARnames = c("geinde","dgtot"),effects = "behandeling1+gbegin+(1|compartiment/ronde)")
 modelsZoo <- function(data,precision = 2, VARnames, effects, treatment = "behandeling1", group1 = NULL){
  if(is.null(group1)){
   means <- data[,lapply(.SD,function(x)sprintf(paste("%.",precision,"f",sep=""), round(mean(x,na.rm=T),precision+1)))

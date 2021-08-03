@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelsZoo.R
 \name{modelsZoo}
 \alias{modelsZoo}
-\title{Title}
+\title{Run models for each parameter}
 \usage{
 modelsZoo(
   data,
@@ -14,11 +14,25 @@ modelsZoo(
 )
 }
 \arguments{
-\item{group1}{}
+\item{data}{data.table}
+
+\item{precision}{numeric number of digits after the decimal}
+
+\item{VARnames}{character vector of variables to use from data}
+
+\item{effects}{formula for starting model}
+
+\item{treatment}{character name of treatment variable}
+
+\item{group1}{character name of second grouping variable, typically faseW}
 }
 \value{
-
+table of means and sd with significance codes
 }
 \description{
-Title
+Run models for each parameter
+}
+\examples{
+groeidataLong <- makeLong(groeidata,2)
+tabel <- modelsZoo(groeidataLong,VARnames = c("geinde","dgtot"),effects = "behandeling1+gbegin+(1|compartiment/ronde)")
 }
