@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @importFrom dplyr bind_rows
-#' @importFrom utils write.table
+#' @importFrom utils write.csv
 #'
 #' @examples
 #' animalsInTrial <- selectTrialAnimals(biggen,72,72,5.4,9.5)[[1]]
@@ -20,7 +20,7 @@
 #' exportResult(animalsInTrial,animalsOutTrial)
 exportResult <- function(dataIn, dataOut, filename = "biggen", fileLoc = "H:\\Downloads"){
   biggen <- bind_rows(dataIn,dataOut)
-  write.table(biggen,file = paste(fileLoc,"\\",filename,".txt",sep=""),sep="|",dec=".",na="NA",row.names = F)
+  write.csv(biggen,file = paste(fileLoc,"\\",filename,".csv",sep=""),na="NA",row.names = F)
 }
 
 #' Give summary statistics

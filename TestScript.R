@@ -10,9 +10,6 @@ table(animalsInTrial$Comp,animalsInTrial$Gew_klasse,animalsInTrial$Beh)
 exportResult(animalsInTrial,animalsOutTrial)
 trialSummary(animalsInTrial)
 
-groeidataLong <- makeLong(groeidata,2)
-boxplotZoo(data=groeidataLong,var="Weight",xlab="Treatment groups per phase",ylab= "Weight (kg)")
-tabel <- modelsZoo(groeidataLong,VARnames = c("geinde","dgtot"),effects = "behandeling1+gbegin+(1|compartiment/ronde)")
 
 data <- animalsInTrial
 
@@ -63,3 +60,8 @@ effects <- "faseW+behandeling1+ronde+faseW:behandeling1+ronde:behandeling1+gbegi
 group1 <- "faseW"
 treatment <- "behandeling1"
 precision <- 2
+
+groeidataLong <- makeLong(groeidata,2)
+boxplotZoo(data=groeidataLong,var="Weight",xlab="Treatment groups per phase",ylab= "Weight (kg)")
+tabel <- modelsZoo(groeidataLong,VARnames = c("geinde"),effects = "behandeling1+gbegin+(1|compartiment/ronde)")
+

@@ -1,5 +1,5 @@
 Package: animalTrial
-Title: What the Package Does (One Line, Title Case)
+Title: Functions for animal trial set-up and analysis
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Evert",
@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "evert.heyrman@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: Several functions to help in selecting piglets for the trial and assigning to pen, treatment, and compartiment. Also some analysis functions for zoötechnical analysis.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
